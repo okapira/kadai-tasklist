@@ -26,6 +26,7 @@
             </tbody>
         </table>
     @endif
+    
     {{-- ページネーションのリンク --}}
     {{ $tasks->links() }}
     
