@@ -23,9 +23,9 @@
                     </a>
                 </li>
                 {{-- フォロー一覧タブ --}}
-                <li class="nav-item"><a href="＃" class="nav-link">Followings</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Followings</a></li>
                 {{-- フォロワー一覧タブ --}}
-                <li class="nav-item"><a href="＃" class="nav-link">Followers</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Followers</a></li>
             </ul>
             @if (Auth::id() == $user->id)
                 {{-- 投稿フォーム --}}
