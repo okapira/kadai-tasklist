@@ -7,10 +7,6 @@
                 <div class="card-header">
                     <h3 class="card-title">{{ $user->name }}</h3>
                 </div>
-                <div class="card-body">
-                    {{-- ユーザのメールアドレスをもとにGravatarを取得して表示 --}}
-                    <img class="rounded img-fluid" src="{{ Gravatar::get($user->email, ['size' => 500]) }}" alt="">
-                </div>
             </div>
         </aside>
         <div class="col-sm-8">
@@ -19,7 +15,7 @@
                 <li class="nav-item">
                     <a href="{{ route('users.show', ['user' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.show') ? 'active' : '' }}">
                         TimeLine
-                        <span class="badge badge-secondary">{{ $user->microposts_count }}</span>
+                        <span class="badge badge-secondary">{{ $user->tasks_count }}</span>
                     </a>
                 </li>
                 {{-- フォロー一覧タブ --}}
@@ -29,10 +25,10 @@
             </ul>
             @if (Auth::id() == $user->id)
                 {{-- 投稿フォーム --}}
-                @include('microposts.form')
+                @include('tasks.form')
             @endif
             {{-- 投稿一覧 --}}
-            @include('microposts.microposts')
+            @include('tasks.tasks')
         </div>
     </div>
 @endsection

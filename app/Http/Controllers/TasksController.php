@@ -16,30 +16,30 @@ class TasksController extends Controller
     // getでtasks/にアクセスされた場合の「一覧表示処理」
     public function index()
     {
-        // タスク一覧を取得
-        $tasks= Task::paginate(25);
-
-        // タスク一覧ビューでそれを表示
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
-        
         $data = [];
         if (\Auth::check()) { // 認証済みの場合
             // 認証済みユーザを取得
             $user = \Auth::user();
             // ユーザの投稿の一覧を作成日時の降順で取得
             // （後のChapterで他ユーザの投稿も取得するように変更しますが、現時点ではこのユーザの投稿のみ取得します）
-            $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
+            $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
 
             $data = [
                 'user' => $user,
-                'microposts' => $microposts,
+                'tasks' => $tasks,
             ];
         }
 
         // Welcomeビューでそれらを表示
         return view('welcome', $data);
+        
+        // // タスク一覧を取得
+        // $tasks= Task::paginate(25);
+
+        // // タスク一覧ビューでそれを表示
+        // return view('tasks.index', [
+        //     'tasks' => $tasks,
+        // ]);
     }
 
     /**
@@ -50,7 +50,7 @@ class TasksController extends Controller
     // getでtasks/createにアクセスされた場合の「新規登録画面表示処理」
     public function create()
     {
-        $task = new Task;
+        // $task = new Task;
 
         // タスク作成ビューを表示
         return view('tasks.create', [
@@ -145,13 +145,10 @@ class TasksController extends Controller
         // タスクを更新
         $task->status = $request->status;    // 追加
         $task->content = $request->content;
-        
         $task->save();
         
-        // dd($task);   // 追加
-
-        // 前のURLへリダイレクトさせる
-        return back();
+        // トップページへリダイレクトさせる
+        return redirect('/');
     }
 
     /**
