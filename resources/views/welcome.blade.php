@@ -12,7 +12,7 @@
             </aside>
             <div class="col-sm-8">
                 {{-- 投稿一覧 --}}
-                @include('tasks.tasks')
+                @include('tasks.index')
             </div>
         </div>
     @else

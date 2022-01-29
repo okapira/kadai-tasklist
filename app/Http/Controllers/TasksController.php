@@ -50,7 +50,7 @@ class TasksController extends Controller
     // getでtasks/createにアクセスされた場合の「新規登録画面表示処理」
     public function create()
     {
-        // $task = new Task;
+        $task = new Task;
 
         // タスク作成ビューを表示
         return view('tasks.create', [
@@ -75,17 +75,19 @@ class TasksController extends Controller
         
         // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
         $request->user()->tasks()->create([
+            'status' => $request->status,
             'content' => $request->content,
         ]);
         
         // タスクを作成
-        $task = new Task;
-        $task->status = $request->status;    // 追加
-        $task->content = $request->content;
-        $task->save();
+        // $task = new Task;
+        // $task->user_id = $request->user_id;
+        // $task->status = $request->status;    // 追加
+        // $task->content = $request->content;
+        // $task->save();
 
         // 前のURLへリダイレクトさせる
-        return back();
+        return redirect('/');
     }
 
     /**
@@ -99,6 +101,11 @@ class TasksController extends Controller
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
+        
+        // タスクの持ち主と現在のログインユーザーが別人ならばリダイレクト
+        if (\Auth::id() != $task->user_id) {
+            return redirect('/');
+        }
 
         // タスク詳細ビューでそれを表示
         return view('tasks.show', [
@@ -117,6 +124,11 @@ class TasksController extends Controller
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
+        
+        // タスクの持ち主と現在のログインユーザーが別人ならばリダイレクト
+        if (\Auth::id() != $task->user_id) {
+            return redirect('/');
+        }
 
         // タスク編集ビューでそれを表示
         return view('tasks.edit', [
@@ -142,6 +154,13 @@ class TasksController extends Controller
         
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
+        
+        
+        // タスクの持ち主と現在のログインユーザーが別人ならばリダイレクト
+        if (\Auth::id() != $task->user_id) {
+            return redirect('/');
+        }
+
         // タスクを更新
         $task->status = $request->status;    // 追加
         $task->content = $request->content;
@@ -169,10 +188,8 @@ class TasksController extends Controller
         }
 
         // 前のURLへリダイレクトさせる
-        return back();
+        return redirect('/');
     }
-    
-    protected $fillable = ['content'];
 
     /**
      * この投稿を所有するユーザ。（ Userモデルとの関係を定義）
